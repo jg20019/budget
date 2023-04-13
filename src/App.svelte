@@ -1,8 +1,9 @@
 <script>
+import BudgetTool from "./lib/BudgetTool.svelte";
 </script>
 
 <main>
-    <h1> Hello World </h1>
+    <BudgetTool />
 </main>
 
 <style>
