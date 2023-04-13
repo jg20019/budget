@@ -4,8 +4,9 @@ import { createEventDispatcher } from 'svelte'
 
 const dispatch = createEventDispatcher()
 
-let input
+export let value
 
+let input = ''
 function onInput(e)
 {
     const inputVal = e.detail.value.trim()
@@ -25,7 +26,7 @@ function onInput(e)
 </script>
 
 <TextInput 
-  bind:value="{input}"
+  bind:value="{value}"
   on:input={onInput}
 />
 

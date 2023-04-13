@@ -2,18 +2,21 @@
     import { createEventDispatcher } from 'svelte'
 
     export let value = ''
+    export let ref
+
     const dispatch = createEventDispatcher()
 
-    function onInput()
+    function onInput(e)
     {
-        dispatch('input', { value })
+        dispatch('input', { value: e.target.value})
     }
 </script>
 
-<input class="bg-gray-200 pl-2 appearance-none border-2 
-    border-gray-200 rounded" 
+<input 
+    class="bg-gray-200 pl-2 appearance-none border-2 
+           border-gray-200 rounded" 
     type="text" 
+    bind:this={ref}
     on:input={onInput} 
-    min=0 
     bind:value="{value}" 
 />
