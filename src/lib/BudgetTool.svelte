@@ -61,7 +61,7 @@ function addExpense()
 
 </script>
 
-<main class="container sm mx-auto"> 
+<main class="container sm px-4 mx-auto"> 
     <h1 class="font-bold text-2xl mt-5"> Make a Budget </h1>
     <h2 class="font-bold text-xl mt-10 mb-2"> Enter Income </h2>
     <div> 
