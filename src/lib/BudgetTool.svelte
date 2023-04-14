@@ -4,11 +4,6 @@ import TextInput from "./TextInput.svelte";
 
 let form = {
     income: 0,
-    expense: {
-        for: '',
-        amount: 0,
-        spent: 0
-    }
 }
 
 let errors = {
@@ -16,24 +11,59 @@ let errors = {
 }
 
 let income = 0
+$: formattedIncome = formatMoney(income)
 
-let expenses = [
-    {
-     for: "Car note",
-     amount: 300.0,
-     spent: 150.0
-    },
-    {
-     for: "Gas money",
-     amount: 50.0,
-     spent: 0,
+function formatMoney(amount){
+    return (amount / 100).toFixed(2)
+}
+
+const minRows = 10
+
+let expenses = [{
+    for: '',
+    amount: '0',
+    amountValue: 0,
+    spent: '0',
+    spentValue: 0,
+}]
+
+// Initialize Rows
+if (expenses.length < minRows) {
+    for (let i = 0; i < minRows - expenses.length; i++){
+        expenses.push({
+            for: '',
+            amount: '0',
+            amountValue: 0,
+            spent: '0',
+            spentValue: 0,
+        })
     }
-]
+}
 
-let expenseForRef
+$: {
+    console.log('Income: ', income)
+    console.log('Formatted Income: ', formattedIncome)
+}
 
-$: remaining = income - expenses.reduce((total, {amount}) => total + amount, 0)
-$: spent = expenses.reduce((total, {spent}) => total + spent, 0)
+$: {
+    expenses.forEach(expense => {
+        console.log('Expenses: ')
+        console.log('For:', expense.for)
+        console.log('Amount:', expense.amount)
+        console.log('Spent:', expense.spent)
+        console.log('')
+    })
+}
+
+$: remaining = income - expenses.reduce((total, {amountValue}) => total + amountValue, 0)
+$: spent = expenses.reduce((total, {spentValue}) => total + spentValue, 0)
+
+function displayMoney(amount)
+{
+  const dollars = Math.floor(amount / 100)
+  const cents = `${amount % 100}`.padStart(2, '0')
+  return `${dollars}.${cents}`
+}
 
 function updateIncome(e)
 {
@@ -41,22 +71,17 @@ function updateIncome(e)
     errors.income = e.detail.error
 }
 
-function addExpense()
+function updateExpense(e, i)
 {
-    let expense = { 
-        for: form.expense.for,
-        amount: form.expense.amount,
-        spent: form.expense.spent
-    }
+    console.log(`Updating expense ${i}`)
+    console.log(e.detail.value)
+    expenses[i].amountValue = e.detail.value
 
-    form.expense.for = ''
-    form.expense.amount = 0
-    form.expense.spent = 0
+}
 
-    expenses.push(expense)
-    expenses = expenses
-
-    expenseForRef.focus()
+function updateSpent(e, i)
+{
+    expenses[i].spentValue = e.detail.value
 }
 
 </script>
@@ -72,54 +97,39 @@ function addExpense()
             on:input={updateIncome} 
         />
         </label>
-        <p class="text-lg"> Remaining: { remaining } </p>
-        <p class="text-lg"> Spent: { spent } </p>
+        <p class="text-lg"> Remaining: { displayMoney(remaining) } </p>
+        <p class="text-lg"> Spent: { displayMoney(spent) } </p>
     </div>
     <h2 class="font-bold text-xl mt-10 mb-2"> Expenses </h2>
-    <table class="table-auto w-screen">
+    <table class="table-auto border-collapse border">
         <thead class="text-left">
             <tr>
-                <th> For </th>
-                <th> Amount </th>
-                <th> Spent </th>
-                <th> &nbsp; </th>
+                <th class="border"> For </th>
+                <th class="border"> Amount </th>
+                <th class="border"> Spent </th>
             </tr>
         </thead>
         <tbody>
+            {#each expenses as expense, i}
             <tr>
-                <td>
+                <td class="border">
                   <TextInput 
-                    bind:ref={expenseForRef}
-                    bind:value={form.expense.for}
+                    bind:value={expense.for}
                   />
                 </td>
-                <td>
+                <td class="border">
                   <NumberInput 
-                    bind:value={form.expense.amount}
+                    bind:value={expense.amount}
+                    on:input={(e) => updateExpense(e, i)} 
                   />
                 </td>
-                <td>
+                <td class="border">
                   <NumberInput
-                    bind:value={form.expense.spent}
+                    bind:value={expense.spent}
+                    on:input={(e) => updateSpent(e, i)}
                   />
-                </td>
-                <td>
-                  <button 
-                    class="font-bold py-2 px-4 rounded 
-                     bg-blue-500 text-white"
-
-                    on:click={addExpense}
-                    > 
-                    Add 
-                  </button>
                 </td>
             </tr>
-            {#each expenses as expense}
-            <tr>
-                <td> {expense.for} </td>
-                <td> {expense.amount} </td>
-                <td> {expense.spent} </td>
-            <tr>
             {/each}
         </tbody>
     </table>

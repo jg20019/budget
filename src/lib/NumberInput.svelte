@@ -9,17 +9,17 @@ export let value
 let input = ''
 function onInput(e)
 {
-    const inputVal = e.detail.value.trim()
-    const amount = parseFloat(inputVal)
-    if (isNaN(amount)) {
+    let inputVal = e.detail.value.trim()
+    if (/^\d+(?:\.\d{2})?$/.test(inputVal)) {
+        inputVal = inputVal.replace(/[^0-9.]/g, '')
         dispatch('input', {
-            value: 0,
-            error: 'Please enter a number'
+            value: Math.round(parseFloat(inputVal) * 100),
+            error: ''
         })
     } else {
         dispatch('input', {
-            value: amount,
-            error: ''
+        value: 0,
+        error: ''
         })
     }
 }
