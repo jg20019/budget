@@ -9,7 +9,6 @@ export let ref = null
 export let row = 0
 export let col = 0
 
-let input = ''
 function onInput(e)
 {
     let inputVal = e.detail.value.trim()
