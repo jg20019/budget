@@ -27,6 +27,7 @@ if (expenses.length < minRows) {
             amountValue: 0,
             spent: '0',
             spentValue: 0,
+            refs: [null, null, null]
         })
     }
 }
@@ -96,6 +97,7 @@ function updateSpent(e, i)
                   <TextInput 
                     row={i}
                     col={0}
+                    bind:ref={expense.refs[0]}
                     bind:value={expense.for}
                     on:move={handleMove}
                   />
@@ -104,6 +106,7 @@ function updateSpent(e, i)
                   <NumberInput 
                     row={i}
                     col={1}
+                    bind:ref={expense.refs[1]}
                     bind:value={expense.amount}
                     on:input={(e) => updateExpense(e, i)} 
                     on:move={handleMove}
@@ -113,6 +116,7 @@ function updateSpent(e, i)
                   <NumberInput
                     row={i}
                     col={2}
+                    bind:ref={expense.refs[2]}
                     bind:value={expense.spent}
                     on:input={(e) => updateSpent(e, i)}
                     on:move={handleMove}

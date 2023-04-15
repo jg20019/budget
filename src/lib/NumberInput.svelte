@@ -5,7 +5,7 @@ import { createEventDispatcher } from 'svelte'
 const dispatch = createEventDispatcher()
 
 export let value
-export let ref
+export let ref = null
 export let row = 0
 export let col = 0
 
@@ -30,6 +30,9 @@ function onInput(e)
 </script>
 
 <TextInput 
+  row={row}
+  col={col}
+  bind:ref={ref}
   bind:value="{value}"
   on:input={onInput}
 />
