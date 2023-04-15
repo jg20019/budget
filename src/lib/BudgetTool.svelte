@@ -19,7 +19,8 @@ let expenses = []
 
 // Initialize Rows
 if (expenses.length < minRows) {
-    for (let i = 0; i < minRows - expenses.length; i++){
+    const newRows = minRows - expenses.length;
+    for (let i = 0; i < newRows; i++){
         expenses.push({
             for: '',
             amount: '0',
