@@ -5,6 +5,7 @@ import { createEventDispatcher } from 'svelte'
 const dispatch = createEventDispatcher()
 
 export let value
+export let ref
 export let row = 0
 export let col = 0
 

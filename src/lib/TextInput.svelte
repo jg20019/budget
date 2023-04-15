@@ -31,6 +31,7 @@
     class="bg-gray-200 pl-2 appearance-none border-2 
            border-gray-200 rounded" 
     type="text" 
+    bind:this={ref}
     on:input={onInput} 
     on:keydown={handleKeyDown}
     bind:value="{value}" 
