@@ -11,11 +11,6 @@ let errors = {
 }
 
 let income = 0
-$: formattedIncome = formatMoney(income)
-
-function formatMoney(amount){
-    return (amount / 100).toFixed(2)
-}
 
 const minRows = 10
 
@@ -40,20 +35,6 @@ if (expenses.length < minRows) {
     }
 }
 
-$: {
-    console.log('Income: ', income)
-    console.log('Formatted Income: ', formattedIncome)
-}
-
-$: {
-    expenses.forEach(expense => {
-        console.log('Expenses: ')
-        console.log('For:', expense.for)
-        console.log('Amount:', expense.amount)
-        console.log('Spent:', expense.spent)
-        console.log('')
-    })
-}
 
 $: remaining = income - expenses.reduce((total, {amountValue}) => total + amountValue, 0)
 $: spent = expenses.reduce((total, {spentValue}) => total + spentValue, 0)
@@ -73,10 +54,7 @@ function updateIncome(e)
 
 function updateExpense(e, i)
 {
-    console.log(`Updating expense ${i}`)
-    console.log(e.detail.value)
     expenses[i].amountValue = e.detail.value
-
 }
 
 function updateSpent(e, i)
