@@ -14,13 +14,8 @@ let income = 0
 
 const minRows = 10
 
-let expenses = [{
-    for: '',
-    amount: '0',
-    amountValue: 0,
-    spent: '0',
-    spentValue: 0,
-}]
+let expenses = []
+
 
 // Initialize Rows
 if (expenses.length < minRows) {
