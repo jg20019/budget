@@ -34,5 +34,6 @@ function onInput(e)
   bind:ref={ref}
   bind:value="{value}"
   on:input={onInput}
+  on:move
 />
 

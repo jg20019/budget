@@ -45,8 +45,11 @@ function displayMoney(amount)
 
 function handleMove(e) {
     const { row, col} = e.detail.value
-    console.log('Row', row)
-    console.log('Col', row)
+    if (row >= 0 && row < expenses.length &&
+        col >= 0 && col < 3) {
+        const expenseRow = expenses[row]
+        expenseRow.refs[col].focus()
+    }
 }
 
 function updateIncome(e)
