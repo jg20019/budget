@@ -5,6 +5,8 @@ import { createEventDispatcher } from 'svelte'
 const dispatch = createEventDispatcher()
 
 export let value
+export let row = 0
+export let col = 0
 
 let input = ''
 function onInput(e)
@@ -23,6 +25,7 @@ function onInput(e)
         })
     }
 }
+
 </script>
 
 <TextInput 

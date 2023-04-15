@@ -46,6 +46,12 @@ function displayMoney(amount)
   return `${dollars}.${cents}`
 }
 
+function handleMove(e) {
+    const { row, col} = e.detail.value
+    console.log('Row', row)
+    console.log('Col', row)
+}
+
 function updateIncome(e)
 {
     income = e.detail.value
@@ -92,19 +98,28 @@ function updateSpent(e, i)
             <tr>
                 <td class="border">
                   <TextInput 
+                    row={i}
+                    col={0}
                     bind:value={expense.for}
+                    on:move={handleMove}
                   />
                 </td>
                 <td class="border">
                   <NumberInput 
+                    row={i}
+                    col={1}
                     bind:value={expense.amount}
                     on:input={(e) => updateExpense(e, i)} 
+                    on:move={handleMove}
                   />
                 </td>
                 <td class="border">
                   <NumberInput
+                    row={i}
+                    col={2}
                     bind:value={expense.spent}
                     on:input={(e) => updateSpent(e, i)}
+                    on:move={handleMove}
                   />
                 </td>
             </tr>
