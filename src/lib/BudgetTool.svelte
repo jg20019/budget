@@ -2,31 +2,38 @@
 import NumberInput from "./NumberInput.svelte";
 import TextInput from "./TextInput.svelte";
 
-let model = {
-    form: {
-        income: 0
-    },
-    income: 0,
-    expenses: [],
-}
+let model = load()
 
-const MIN_ROWS = 10
-
-// Initialize Rows
-if (model.expenses.length < MIN_ROWS) {
-    const newRows = MIN_ROWS - model.expenses.length;
-    for (let i = 0; i < newRows; i++){
-        model.expenses.push({
-            for: '',
-            amount: '0',
-            amountValue: 0,
-            spent: '0',
-            spentValue: 0,
-            refs: [null, null, null]
-        })
+function newModel(){
+    let newModel =  {
+        form: {
+            income: 0
+        },
+        income: 0,
+        expenses: [],
     }
+
+    const MIN_ROWS = 10
+
+   if (newModel.expenses.length < MIN_ROWS) {
+       const numRows = MIN_ROWS - newModel.expenses.length;
+       for (let i = 0; i < numRows; i++){
+           newModel.expenses.push({
+               for: '',
+               amount: '0',
+               amountValue: 0,
+               spent: '0',
+               spentValue: 0,
+               refs: [null, null, null]
+           })
+       }
+   }
+   return newModel
 }
 
+$: {
+    save(model)
+}
 
 $: remaining = model.income - model.expenses.reduce((total, {amountValue}) => total + amountValue, 0)
 $: spent = model.expenses.reduce((total, {spentValue}) => total + spentValue, 0)
@@ -62,8 +69,32 @@ function updateSpent(e, i)
     model.expenses[i].spentValue = e.detail.value
 }
 
+function load(){
+    const savedModel = localStorage.getItem('model')
+    if (savedModel) {
+        return JSON.parse(savedModel)
+    } else {
+        return newModel()
+    }
+}
 
-
+function save(model){
+    const savedModel = {}
+    savedModel.form = Object.assign({}, model.form)
+    savedModel.income = model.income
+    savedModel.expenses = []
+    model.expenses.forEach(expense => {
+        savedModel.expenses.push({
+            for: expense.for,
+            amount: expense.amount,
+            amountValue: expense.amountValue,
+            spent: expense.spent,
+            spentValue: expense.spentValue,
+            refs: [null, null, null]
+        })
+    })
+    localStorage.setItem('model', JSON.stringify(savedModel))
+}
 </script>
 
 <main class="container sm px-4 mx-auto"> 
