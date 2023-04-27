@@ -1,42 +1,20 @@
 <script>
-import NumberInput from "./NumberInput.svelte";
-import TextInput from "./TextInput.svelte";
+import NumberInput from "./NumberInput.svelte"
+import TextInput from "./TextInput.svelte"
+import { createBudget } from "./budget.js"
+import { createEventDispatcher } from "svelte"
 
-let model = load()
+export let budget
+export let index
 
-function newModel(){
-    let newModel =  {
-        form: {
-            income: 0
-        },
-        income: 0,
-        expenses: [],
-    }
-
-    const MIN_ROWS = 10
-
-   if (newModel.expenses.length < MIN_ROWS) {
-       const numRows = MIN_ROWS - newModel.expenses.length;
-       for (let i = 0; i < numRows; i++){
-           newModel.expenses.push({
-               for: '',
-               amount: '0',
-               amountValue: 0,
-               spent: '0',
-               spentValue: 0,
-               refs: [null, null, null]
-           })
-       }
-   }
-   return newModel
-}
+const dispatch = createEventDispatcher()
 
 $: {
-    save(model)
+    dispatch('updated-budget', {budget: budget, index: index})
 }
 
-$: remaining = model.income - model.expenses.reduce((total, {amountValue}) => total + amountValue, 0)
-$: spent = model.expenses.reduce((total, {spentValue}) => total + spentValue, 0)
+$: remaining = budget.income - budget.expenses.reduce((total, {amountValue}) => total + amountValue, 0)
+$: spent = budget.expenses.reduce((total, {spentValue}) => total + spentValue, 0)
 
 function displayMoney(amount)
 {
@@ -47,53 +25,26 @@ function displayMoney(amount)
 
 function handleMove(e) {
     const { row, col} = e.detail.value
-    if (row >= 0 && row < model.expenses.length &&
+    if (row >= 0 && row < budget.expenses.length &&
         col >= 0 && col < 3) {
-        const expenseRow = model.expenses[row]
+        const expenseRow = budget.expenses[row]
         expenseRow.refs[col].focus()
     }
 }
 
 function updateIncome(e)
 {
-    model.income = e.detail.value
+    budget.income = e.detail.value
 }
 
 function updateExpense(e, i)
 {
-    model.expenses[i].amountValue = e.detail.value
+    budget.expenses[i].amountValue = e.detail.value
 }
 
 function updateSpent(e, i)
 {
-    model.expenses[i].spentValue = e.detail.value
-}
-
-function load(){
-    const savedModel = localStorage.getItem('model')
-    if (savedModel) {
-        return JSON.parse(savedModel)
-    } else {
-        return newModel()
-    }
-}
-
-function save(model){
-    const savedModel = {}
-    savedModel.form = Object.assign({}, model.form)
-    savedModel.income = model.income
-    savedModel.expenses = []
-    model.expenses.forEach(expense => {
-        savedModel.expenses.push({
-            for: expense.for,
-            amount: expense.amount,
-            amountValue: expense.amountValue,
-            spent: expense.spent,
-            spentValue: expense.spentValue,
-            refs: [null, null, null]
-        })
-    })
-    localStorage.setItem('model', JSON.stringify(savedModel))
+    budget.expenses[i].spentValue = e.detail.value
 }
 </script>
 
@@ -104,7 +55,7 @@ function save(model){
         <label class="text-lg" for="income"> 
         Income: 
         <NumberInput 
-            bind:value={model.form.income}
+            bind:value={budget.form.income}
             on:input={updateIncome} 
         />
         </label>
@@ -121,7 +72,7 @@ function save(model){
             </tr>
         </thead>
         <tbody>
-            {#each model.expenses as expense, i}
+            {#each budget.expenses as expense, i}
             <tr>
                 <td class="border">
                   <TextInput 
