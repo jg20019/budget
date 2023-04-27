@@ -2,26 +2,21 @@
 import NumberInput from "./NumberInput.svelte";
 import TextInput from "./TextInput.svelte";
 
-let form = {
+let model = {
+    form: {
+        income: 0
+    },
     income: 0,
+    expenses: [],
 }
 
-let errors = {
-    income: ''
-}
-
-let income = 0
-
-const minRows = 10
-
-let expenses = []
-
+const MIN_ROWS = 10
 
 // Initialize Rows
-if (expenses.length < minRows) {
-    const newRows = minRows - expenses.length;
+if (model.expenses.length < MIN_ROWS) {
+    const newRows = MIN_ROWS - model.expenses.length;
     for (let i = 0; i < newRows; i++){
-        expenses.push({
+        model.expenses.push({
             for: '',
             amount: '0',
             amountValue: 0,
@@ -33,8 +28,8 @@ if (expenses.length < minRows) {
 }
 
 
-$: remaining = income - expenses.reduce((total, {amountValue}) => total + amountValue, 0)
-$: spent = expenses.reduce((total, {spentValue}) => total + spentValue, 0)
+$: remaining = model.income - model.expenses.reduce((total, {amountValue}) => total + amountValue, 0)
+$: spent = model.expenses.reduce((total, {spentValue}) => total + spentValue, 0)
 
 function displayMoney(amount)
 {
@@ -45,28 +40,29 @@ function displayMoney(amount)
 
 function handleMove(e) {
     const { row, col} = e.detail.value
-    if (row >= 0 && row < expenses.length &&
+    if (row >= 0 && row < model.expenses.length &&
         col >= 0 && col < 3) {
-        const expenseRow = expenses[row]
+        const expenseRow = model.expenses[row]
         expenseRow.refs[col].focus()
     }
 }
 
 function updateIncome(e)
 {
-    income = e.detail.value
-    errors.income = e.detail.error
+    model.income = e.detail.value
 }
 
 function updateExpense(e, i)
 {
-    expenses[i].amountValue = e.detail.value
+    model.expenses[i].amountValue = e.detail.value
 }
 
 function updateSpent(e, i)
 {
-    expenses[i].spentValue = e.detail.value
+    model.expenses[i].spentValue = e.detail.value
 }
+
+
 
 </script>
 
@@ -77,7 +73,7 @@ function updateSpent(e, i)
         <label class="text-lg" for="income"> 
         Income: 
         <NumberInput 
-            bind:value={form.income}
+            bind:value={model.form.income}
             on:input={updateIncome} 
         />
         </label>
@@ -94,7 +90,7 @@ function updateSpent(e, i)
             </tr>
         </thead>
         <tbody>
-            {#each expenses as expense, i}
+            {#each model.expenses as expense, i}
             <tr>
                 <td class="border">
                   <TextInput 
@@ -130,7 +126,3 @@ function updateSpent(e, i)
         </tbody>
     </table>
 </main>
-
-<style>
-
-</style>
