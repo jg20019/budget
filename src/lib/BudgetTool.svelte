@@ -9,10 +9,6 @@ export let index
 
 const dispatch = createEventDispatcher()
 
-$: {
-    dispatch('updated-budget', {budget: budget, index: index})
-}
-
 $: remaining = budget.income - budget.expenses.reduce((total, {amountValue}) => total + amountValue, 0)
 $: spent = budget.expenses.reduce((total, {spentValue}) => total + spentValue, 0)
 
@@ -35,16 +31,19 @@ function handleMove(e) {
 function updateIncome(e)
 {
     budget.income = e.detail.value
+    dispatch('update-budget', {budget: budget, index: index})
 }
 
 function updateExpense(e, i)
 {
     budget.expenses[i].amountValue = e.detail.value
+    dispatch('update-budget', {budget: budget, index: index})
 }
 
 function updateSpent(e, i)
 {
     budget.expenses[i].spentValue = e.detail.value
+    dispatch('update-budget', {budget: budget, index: index})
 }
 </script>
 
