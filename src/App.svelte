@@ -4,6 +4,8 @@ import { createBudget, saveBudget } from "./lib/budget";
 
 let [budgets, index] = load()
 
+$: selectedBudget = (budgets.length > 0 && index > -1) ? budgets[index] : null
+
 function updateBudget(event) {
     const index = event.detail.index
     const budget = event.detail.budget
@@ -17,7 +19,7 @@ function load(){
         const parsedModel = JSON.parse(model)
         return [parsedModel.budgets, parsedModel.index]
     } else {
-        return [[createBudget()], 0]
+        return [[], -1]
     }
 }
 
@@ -33,11 +35,27 @@ $: {
 }
 </script>
 
-<main>
-    <BudgetTool 
-        budget={budgets[index]} 
-        index={index} 
-        on:update-budget={updateBudget}/>
+<main class="container mx-auto w-9/12 flex flex-col h-screen">
+    <header class="mt-2 mb-4">
+        <h1 class="text-2xl"> Budget </h1>
+    </header>
+    {#if selectedBudget}
+        <BudgetTool 
+            budget={selectedBudget} 
+            index={index} 
+            on:update-budget={updateBudget}/>
+    {:else}
+        <div class="flex flex-col place-content-center h-full">
+            <p class="text-lg text-center"> You haven't created any budgets </p>
+            <button 
+                class="mt-2 mx-auto p-2 w-48 rounded inline-block 
+                       text-lg 
+                       bg-green-500 hover:text-white hover:bg-green-800"
+            > 
+                Create Budget
+            </button>
+        </div>
+    {/if}
 </main>
 
 <style>
