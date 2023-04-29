@@ -6,6 +6,13 @@ let [budgets, index] = load()
 
 $: selectedBudget = (budgets.length > 0 && index > -1) ? budgets[index] : null
 
+function addBudget() {
+    let budget = createBudget()
+    budgets.push(budget)
+    budgets = budgets
+    index++
+}
+
 function updateBudget(event) {
     const index = event.detail.index
     const budget = event.detail.budget
@@ -48,6 +55,7 @@ $: {
         <div class="flex flex-col place-content-center h-full">
             <p class="text-lg text-center"> You haven't created any budgets </p>
             <button 
+                on:click={addBudget}
                 class="mt-2 mx-auto p-2 w-48 rounded inline-block 
                        text-lg 
                        bg-green-500 hover:text-white hover:bg-green-800"
