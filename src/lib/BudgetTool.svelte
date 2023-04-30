@@ -54,8 +54,7 @@ function updateSpent(e, i)
 </script>
 
 <main> 
-    <h1 class="font-bold text-2xl mt-5"> Make a Budget </h1>
-    <h2 class="font-bold text-xl mt-10 mb-2"> Enter Income </h2>
+    <h2 class="font-bold text-xl mt-10 mb-2"> Income </h2>
     <div> 
         <label class="block text-lg" for="date">
         Date: 

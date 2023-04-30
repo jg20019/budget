@@ -48,8 +48,9 @@ $: {
 </script>
 
 <main class="container mx-auto w-9/12 flex flex-col h-screen">
-    <header class="mt-2 mb-4">
+    <header class="flex mt-2 mb-4">
         <h1 class="font-bold text-3xl"> Budget </h1>
+        <a href="/"> Home </a>
     </header>
     {#if selectedBudget}
         <BudgetTool 
