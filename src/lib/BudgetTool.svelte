@@ -1,8 +1,8 @@
 <script>
 import NumberInput from "./NumberInput.svelte"
 import TextInput from "./TextInput.svelte"
-import { createBudget } from "./budget.js"
 import { createEventDispatcher } from "svelte"
+import { calcSpent } from "./budget.js"
 
 export let budget
 export let index
@@ -10,7 +10,7 @@ export let index
 const dispatch = createEventDispatcher()
 
 $: remaining = budget.income - budget.expenses.reduce((total, {amountValue}) => total + amountValue, 0)
-$: spent = budget.expenses.reduce((total, {spentValue}) => total + spentValue, 0)
+$: spent = calcSpent(budget)
 
 function displayMoney(amount)
 {
@@ -34,6 +34,12 @@ function updateIncome(e)
     dispatch('update-budget', {budget: budget, index: index})
 }
 
+function updateDate(e) 
+{
+    budget.form.date = e.detail.value
+    dispatch('update-budget', {budget, index})
+}
+
 function updateExpense(e, i)
 {
     budget.expenses[i].amountValue = e.detail.value
@@ -51,15 +57,22 @@ function updateSpent(e, i)
     <h1 class="font-bold text-2xl mt-5"> Make a Budget </h1>
     <h2 class="font-bold text-xl mt-10 mb-2"> Enter Income </h2>
     <div> 
-        <label class="text-lg" for="income"> 
+        <label class="block text-lg" for="date">
+        Date: 
+        <TextInput 
+          bind:value={budget.form.date}
+          on:input={updateDate}
+        />
+        </label>
+        <label class="block text-lg mt-2" for="income"> 
         Income: 
         <NumberInput 
             bind:value={budget.form.income}
             on:input={updateIncome} 
         />
         </label>
-        <p class="text-lg"> Remaining: { displayMoney(remaining) } </p>
-        <p class="text-lg"> Spent: { displayMoney(spent) } </p>
+        <p class="text-lg mt-2"> Remaining: { displayMoney(remaining) } </p>
+        <p class="text-lg mt-2"> Spent: { displayMoney(spent) } </p>
     </div>
     <h2 class="font-bold text-xl mt-10 mb-2"> Expenses </h2>
     <table class="table-auto border-collapse border">

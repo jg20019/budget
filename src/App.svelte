@@ -1,5 +1,6 @@
 <script>
 import BudgetTool from "./lib/BudgetTool.svelte";
+import BudgetTable from "./lib/BudgetTable.svelte";
 import { createBudget, saveBudget } from "./lib/budget";
 
 let [budgets, index] = load()
@@ -13,6 +14,10 @@ function addBudget() {
     index++
 }
 
+function selectBudget(event) {
+   index = event.detail.index 
+}
+
 function updateBudget(event) {
     const index = event.detail.index
     const budget = event.detail.budget
@@ -24,7 +29,7 @@ function load(){
     const model = localStorage.getItem('model')
     if (model) {
         const parsedModel = JSON.parse(model)
-        return [parsedModel.budgets, parsedModel.index]
+        return [parsedModel.budgets, -1]
     } else {
         return [[], -1]
     }
@@ -51,6 +56,8 @@ $: {
             budget={selectedBudget} 
             index={index} 
             on:update-budget={updateBudget}/>
+    {:else if budgets.length > 0}
+        <BudgetTable budgets={budgets} on:select-budget={selectBudget} />
     {:else}
         <div class="flex flex-col place-content-center h-full">
             <p class="text-lg text-center"> You haven't created any budgets </p>

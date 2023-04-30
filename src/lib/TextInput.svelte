@@ -4,7 +4,7 @@
     export let value = ''
     export let row = 0
     export let col = 0
-    export let ref
+    export let ref = null
 
     const dispatch = createEventDispatcher()
 

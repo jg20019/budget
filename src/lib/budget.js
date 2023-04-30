@@ -3,7 +3,8 @@
 export function createBudget() {
     let budget =  {
         form: {
-            income: 0
+            income: 0,
+            date: '',
         },
         income: 0,
         expenses: [],
@@ -25,6 +26,11 @@ export function createBudget() {
         }
     }
     return budget
+}
+
+// Calculates how much money was spent on the budget
+export function calcSpent(budget) {
+    return budget.expenses.reduce((total, {spentValue}) => total + spentValue, 0)
 }
 
 // Returns data that needs to be saved
