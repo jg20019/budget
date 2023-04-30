@@ -44,7 +44,7 @@ $: {
 
 <main class="container mx-auto w-9/12 flex flex-col h-screen">
     <header class="mt-2 mb-4">
-        <h1 class="text-2xl"> Budget </h1>
+        <h1 class="font-bold text-3xl"> Budget </h1>
     </header>
     {#if selectedBudget}
         <BudgetTool 
